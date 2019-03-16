@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chart App</string>
+  <string name="statistics">Statistics</string>
+  <string name="night_mode_switch">Night mode switch</string>
+</resources>
