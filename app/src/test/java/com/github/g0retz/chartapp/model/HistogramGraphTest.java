@@ -42,11 +42,11 @@ public class HistogramGraphTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorFailOnNull() {
-    Graph graph = new HistogramGraph("B", 2, null);
+    new HistogramGraph("B", 2, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorFailOnEmpty() {
-    Graph graph = new HistogramGraph("C", 3, new ArrayList<Integer>());
+    new HistogramGraph("C", 3, new ArrayList<Integer>());
   }
 }

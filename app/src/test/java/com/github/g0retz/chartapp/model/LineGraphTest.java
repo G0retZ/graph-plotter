@@ -42,11 +42,11 @@ public class LineGraphTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorFailOnNull() {
-    Graph graph = new LineGraph("B", 2, null);
+    new LineGraph("B", 2, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorFailOnEmpty() {
-    Graph graph = new LineGraph("C", 3, new ArrayList<Integer>());
+    new LineGraph("C", 3, new ArrayList<Integer>());
   }
 }
