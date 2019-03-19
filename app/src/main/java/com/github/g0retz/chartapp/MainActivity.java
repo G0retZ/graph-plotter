@@ -1,20 +1,27 @@
 package com.github.g0retz.chartapp;
 
-import android.content.res.Configuration;
+import android.app.Activity;
+import android.app.UiModeManager;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
+
+  private UiModeManager uiManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     setTitle(R.string.statistics);
+    uiManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+    if (VERSION.SDK_INT < VERSION_CODES.M) {
+      uiManager.enableCarMode(0);
+    }
   }
 
   @Override
@@ -37,19 +44,17 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void switchNightMode() {
-    int nightModeFlags =
-        getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+    int nightModeFlags = uiManager.getNightMode();
     switch (nightModeFlags) {
-      case Configuration.UI_MODE_NIGHT_YES:
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+      case UiModeManager.MODE_NIGHT_YES:
+        uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
         break;
-      case Configuration.UI_MODE_NIGHT_NO:
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+      case UiModeManager.MODE_NIGHT_NO:
+        uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
         break;
-      case Configuration.UI_MODE_NIGHT_UNDEFINED:
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+      case UiModeManager.MODE_NIGHT_AUTO:
+        uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
         break;
     }
-    recreate();
   }
 }

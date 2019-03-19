@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="PlotNavigator">
+    <attr
+      format="dimension"
+      name="radius"/>
+    <attr
+      format="float"
+      name="inner_radius_ratio"/>
+    <attr
+      format="boolean"
+      name="sum_value_visible"/>
+    <attr
+      format="boolean"
+      name="values_visible"/>
+    <attr
+      format="color"
+      name="sum_value_color"/>
+    <attr
+      format="float"
+      name="value"/>
+    <attr
+      format="color"
+      name="value_color"/>
+    <attr
+      format="color"
+      name="empty_color"/>
+  </declare-styleable>
+</resources>
