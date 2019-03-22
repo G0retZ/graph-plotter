@@ -1,6 +1,7 @@
 package com.github.g0retz.chartapp.model;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class Graph {
@@ -9,21 +10,9 @@ public abstract class Graph {
   public final int color;
   public final List<Integer> values;
 
-  public Graph(List<Integer> values) {
-    this(null, 0, values);
-  }
-
-  public Graph(String name, List<Integer> values) {
-    this(name, 0, values);
-  }
-
-  public Graph(int color, List<Integer> values) {
-    this(null, color, values);
-  }
-
-  public Graph(String name, int color, List<Integer> values) {
+  Graph(String name, int color, List<Integer> values) {
     if (name == null) {
-      name = "Unnamed Graph";
+      name = "Unnamed " + this.getClass().getSimpleName();
     }
     if (values == null || values.isEmpty()) {
       throw new IllegalArgumentException(String.format("No values provided: %s", values));
@@ -34,6 +23,85 @@ public abstract class Graph {
   }
 
   abstract public void visit(GraphVisitor visitor);
+
+  public Float getPoint(float position) {
+    int pos = Math.round(position);
+    if (pos >= 0 && pos < values.size()) {
+      return (float) values.get(pos);
+    }
+    return null;
+  }
+
+  /**
+   * Extract visible path of points represented by array of Float[3], where indexes are: 0 - X value
+   * of next point (position), 1 - Y value of next point (from values), 2 - 1 if point is visible, 0
+   * if not.
+   *
+   * WARNING! For memory saving the resulting array changes while iterating! So copy the values from
+   * array you get ASAP if you need them.
+   *
+   * @param start - start position
+   * @param max - max value
+   * @param end - end position
+   * @param min - min value
+   * @return iterable of next points
+   */
+  public Iterable<Float[]> getPathForArea(final float start, final float end, final float min,
+      final float max) {
+    final int last = values.size() - 1;
+    if (max <= min || start == end
+        || !checkRangesClipping(start, end, 0, last)) {
+      return Collections.emptySet();
+    }
+    return new Iterable<Float[]>() {
+      @Override
+      public Iterator<Float[]> iterator() {
+        return new Iterator<Float[]>() {
+          Float[] result = new Float[3];
+          float currentPosition = start;
+
+          @Override
+          public boolean hasNext() {
+            if (start < end && currentPosition > end) {
+              return false;
+            }
+            if (start > end && currentPosition < end) {
+              return false;
+            }
+            return checkRangesClipping(currentPosition, end, 0, last);
+          }
+
+          @Override
+          public Float[] next() {
+            // Check
+            currentPosition = getValue(start, currentPosition, end, min, max, result);
+            return result;
+          }
+        };
+      }
+    };
+  }
+
+  boolean checkPointClipping(float point, float start, float end) {
+    return point >= start && point <= end;
+  }
+
+  boolean checkRangesClipping(float from, float to, float start, float end) {
+    return Math.min(from, to) <= end && Math.max(from, to) >= start;
+  }
+
+  /**
+   * Should return next position and fill the [result] with position, value and gap flag It is
+   * guaranteed, that the incrementing position will meet the actual values positions.
+   *
+   * @param position current position
+   * @param end last position
+   * @param min value bound
+   * @param max value bound
+   * @param result position, value and flag
+   * @return next position
+   */
+  abstract float getValue(float start, float position, float end, float min, float max, Float[] result);
 
   @Override
   public boolean equals(Object o) {
@@ -63,9 +131,10 @@ public abstract class Graph {
     return result;
   }
 
+  @SuppressWarnings("NullableProblems")
   @Override
   public String toString() {
-    return "Graph{" +
+    return this.getClass().getSimpleName() + "{" +
         "name='" + name + '\'' +
         ", color=" + color +
         ", values=" + values +
