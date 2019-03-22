@@ -18,6 +18,8 @@ public class HistogramGraphTest {
     assertEquals("Unnamed HistogramGraph", graph.name);
     assertEquals(0, graph.color);
     assertEquals(Arrays.asList(0, 3, 2), graph.values);
+    assertEquals(graph.minValue, 0);
+    assertEquals(graph.maxValue, 3);
   }
 
   @Test
@@ -26,6 +28,8 @@ public class HistogramGraphTest {
     assertEquals("A", graph.name);
     assertEquals(0, graph.color);
     assertEquals(Arrays.asList(10, 13, 12), graph.values);
+    assertEquals(graph.minValue, 10);
+    assertEquals(graph.maxValue, 13);
   }
 
   @Test
@@ -34,6 +38,8 @@ public class HistogramGraphTest {
     assertEquals("Unnamed HistogramGraph", graph.name);
     assertEquals(5, graph.color);
     assertEquals(Arrays.asList(20, 23, 22), graph.values);
+    assertEquals(graph.minValue, 20);
+    assertEquals(graph.maxValue, 23);
   }
 
   @Test
@@ -42,6 +48,8 @@ public class HistogramGraphTest {
     assertEquals("A", graph.name);
     assertEquals(1, graph.color);
     assertEquals(Arrays.asList(30, 33, 32), graph.values);
+    assertEquals(graph.minValue, 30);
+    assertEquals(graph.maxValue, 33);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -51,7 +59,7 @@ public class HistogramGraphTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorFailOnEmpty() {
-    new HistogramGraph("C", 3, new ArrayList<Integer>());
+    new HistogramGraph("C", 3, new ArrayList<>());
   }
 
   @Test
@@ -59,6 +67,8 @@ public class HistogramGraphTest {
     Graph graph = new HistogramGraph("A", 1, Arrays
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
+    assertEquals(graph.minValue, -1983);
+    assertEquals(graph.maxValue, 1809);
     // Area is lefter
     assertFalse(graph.getPathForArea(-10.1f, -0.01f, -3000, 3000).iterator().hasNext());
     assertFalse(graph.getPathForArea(-0.01f, -10.1f, -3000, 3000).iterator().hasNext());

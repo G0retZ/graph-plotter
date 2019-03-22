@@ -9,6 +9,8 @@ public abstract class Graph {
   public final String name;
   public final int color;
   public final List<Integer> values;
+  public final int minValue;
+  public final int maxValue;
 
   Graph(String name, int color, List<Integer> values) {
     if (name == null) {
@@ -20,6 +22,18 @@ public abstract class Graph {
     this.name = name;
     this.color = color;
     this.values = Collections.unmodifiableList(values);
+    int min = Integer.MAX_VALUE;
+    int max = Integer.MIN_VALUE;
+    for (int value : values) {
+      if (value < min) {
+        min = value;
+      }
+      if (value > max) {
+        max = value;
+      }
+    }
+    minValue = min;
+    maxValue = max;
   }
 
   abstract public void visit(GraphVisitor visitor);
@@ -46,38 +60,33 @@ public abstract class Graph {
    * @param min - min value
    * @return iterable of next points
    */
-  public Iterable<Float[]> getPathForArea(final float start, final float end, final float min,
-      final float max) {
+  public Iterable<Float[]> getPathForArea(final float start, final float end,
+      final float min, final float max) {
     final int last = values.size() - 1;
     if (max <= min || start == end
         || !checkRangesClipping(start, end, 0, last)) {
       return Collections.emptySet();
     }
-    return new Iterable<Float[]>() {
+    return () -> new Iterator<Float[]>() {
+      Float[] result = new Float[3];
+      float currentPosition = start;
+
       @Override
-      public Iterator<Float[]> iterator() {
-        return new Iterator<Float[]>() {
-          Float[] result = new Float[3];
-          float currentPosition = start;
+      public boolean hasNext() {
+        if (start < end && currentPosition > end) {
+          return false;
+        }
+        if (start > end && currentPosition < end) {
+          return false;
+        }
+        return checkRangesClipping(currentPosition, end, 0, last);
+      }
 
-          @Override
-          public boolean hasNext() {
-            if (start < end && currentPosition > end) {
-              return false;
-            }
-            if (start > end && currentPosition < end) {
-              return false;
-            }
-            return checkRangesClipping(currentPosition, end, 0, last);
-          }
-
-          @Override
-          public Float[] next() {
-            // Check
-            currentPosition = getValue(start, currentPosition, end, min, max, result);
-            return result;
-          }
-        };
+      @Override
+      public Float[] next() {
+        // Check
+        currentPosition = getValue(start, currentPosition, end, min, max, result);
+        return result;
       }
     };
   }
