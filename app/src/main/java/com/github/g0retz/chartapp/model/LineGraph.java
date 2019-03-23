@@ -30,11 +30,7 @@ public class LineGraph extends Graph {
     result[0] = null;
     result[1] = null;
     result[2] = null;
-    if (start < end) {
-      return getValueForwards(start, position, end, min, max, result);
-    } else {
-      return getValueBackwards(start, position, end, min, max, result);
-    }
+    return getValueForwards(start, position, end, min, max, result);
   }
 
   private float getValueForwards(float start, float position, float end, float min, float max,
@@ -62,7 +58,7 @@ public class LineGraph extends Graph {
           result[0] = (float) pos;
           return pos + 2;
         }
-        if (checkRangesClipping(y1, y2, min, max)) {
+        if (checkRangesClipping(Math.min(y1, y2), Math.max(y1, y2), min, max)) {
           if (!checkPointClipping(y1, min, max) && !checkPointClipping(y2, min, max)) {
             if (y1 > y2) {
               result[0] = pos + (max - y1) / (y2 - y1);
@@ -98,67 +94,6 @@ public class LineGraph extends Graph {
       }
     } else {
       return pos + 1;
-    }
-  }
-
-  private float getValueBackwards(float start, float position, float end, float min, float max,
-      Float[] result) {
-    int last = values.size() - 1;
-    if (position > last) {
-      position = last;
-    } else if (position < end) {
-      position = end;
-    }
-    result[0] = position;
-    result[1] = getValue(position);
-    int pos = result[0].intValue();
-    if (result[1] == null || !checkPointClipping(result[1], min, max)) {
-      pos++;
-      while (pos >= end && pos > 0) {
-        int y1 = values.get(pos);
-        int y2 = values.get(pos - 1);
-        result[1] = (float) y2;
-        result[2] = checkPointClipping(y1, min, max) ? 0f : 1f;
-        if (y2 == min || y2 == max) {
-          result[0] = (float) pos;
-          return pos - 2;
-        }
-        if (checkRangesClipping(y1, y2, min, max)) {
-          if (!checkPointClipping(y1, min, max) && !checkPointClipping(y2, min, max)) {
-            if (y1 > y2) {
-              result[0] = pos - 1 + (max - y2) / (y1 - y2);
-              result[1] = max;
-              return pos - 1 + (min - y2) / (y1 - y2);
-            } else {
-              result[0] = pos - 1 + (min - y2) / (y1 - y2);
-              result[1] = min;
-              return pos - 1 + (max - y2) / (y1 - y2);
-            }
-          } else if (y2 > max || y1 > max) {
-            result[0] = pos - 1 + (max - y2) / (y1 - y2);
-            result[1] = max;
-            return pos - (y2 > max ? 2 : 1);
-          } else {
-            result[0] = pos - 1 + (min - y2) / (y1 - y2);
-            result[1] = min;
-            return pos - (y2 < min ? 2 : 1);
-          }
-        }
-        pos--;
-      }
-    } else if (position == last || position >= start) {
-      result[2] = 1f;
-    } else {
-      result[2] = 0f;
-    }
-    if (position != pos) {
-      if (position == start || checkPointClipping(values.get(pos), min, max)) {
-        return pos;
-      } else {
-        return pos - Math.ulp(pos);
-      }
-    } else {
-      return pos - 1;
     }
   }
 

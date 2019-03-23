@@ -63,7 +63,7 @@ public abstract class Graph {
   public Iterable<Float[]> getPathForArea(final float start, final float end,
       final float min, final float max) {
     final int last = values.size() - 1;
-    if (max <= min || start == end
+    if (max <= min || start >= end
         || !checkRangesClipping(start, end, 0, last)) {
       return Collections.emptySet();
     }
@@ -73,13 +73,7 @@ public abstract class Graph {
 
       @Override
       public boolean hasNext() {
-        if (start < end && currentPosition > end) {
-          return false;
-        }
-        if (start > end && currentPosition < end) {
-          return false;
-        }
-        return checkRangesClipping(currentPosition, end, 0, last);
+        return currentPosition <= end && checkRangesClipping(currentPosition, end, 0, last);
       }
 
       @Override
@@ -96,7 +90,7 @@ public abstract class Graph {
   }
 
   boolean checkRangesClipping(float from, float to, float start, float end) {
-    return Math.min(from, to) <= end && Math.max(from, to) >= start;
+    return from <= end && to >= start;
   }
 
   /**

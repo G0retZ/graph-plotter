@@ -27,16 +27,12 @@ public class HistogramGraph extends Graph {
 
   @Override
   float getValue(float start, float position, float end, float min, float max, Float[] result) {
-    int pos = (int) position + (start > end ? 1 : 0);
-    if (pos != position) {
-      if (start > end && pos >= position + 0.5f) {
-        pos--;
-      } else if (start < end && pos <= position - 0.5f) {
+    int pos = (int) position;
+    if (pos <= position - 0.5f) {
         pos++;
-      }
     }
     while (pos < 0 || pos > values.size() - 1) {
-      pos += start < end ? 1 : -1;
+      pos ++;
     }
     result[0] = (float) pos;
     position = Float.valueOf(values.get(pos));
@@ -50,6 +46,6 @@ public class HistogramGraph extends Graph {
       result[1] = position;
       result[2] = 0f;
     }
-    return pos + (start < end ? 1 : -1);
+    return pos + 1;
   }
 }

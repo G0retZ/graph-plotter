@@ -77,31 +77,31 @@ public class HistogramGraphTest {
     assertFalse(graph.getPathForArea(30.3f, 19.01f, -3000, 3000).iterator().hasNext());
     // Area is exact
     assertTrue(graph.getPathForArea(0f, 19f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(19f, 0f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(19f, 0f, -3000, 3000).iterator().hasNext());
     // Area starts inside and ends exact
     assertTrue(graph.getPathForArea(1.3f, 19f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(17.7f, 0f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(17.7f, 0f, -3000, 3000).iterator().hasNext());
     // Area starts exact and ends inside
     assertTrue(graph.getPathForArea(0f, 17.7f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(19f, 1.3f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(19f, 1.3f, -3000, 3000).iterator().hasNext());
     // Area starts outside and ends exact
     assertTrue(graph.getPathForArea(-1.3f, 19f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(20.3f, 0f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(20.3f, 0f, -3000, 3000).iterator().hasNext());
     // Area starts exact and ends outside
     assertTrue(graph.getPathForArea(0f, 20.3f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(19f, -1.3f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(19f, -1.3f, -3000, 3000).iterator().hasNext());
     // Area starts outside and ends inside
     assertTrue(graph.getPathForArea(-1.3f, 18f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(20.3f, 1f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(20.3f, 1f, -3000, 3000).iterator().hasNext());
     // Area starts inside and ends outside
     assertTrue(graph.getPathForArea(1f, 20.3f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(18f, -1.3f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(18f, -1.3f, -3000, 3000).iterator().hasNext());
     // Area starts and ends inside
     assertTrue(graph.getPathForArea(1.3f, 17.7f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(17.7f, 1.3f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(17.7f, 1.3f, -3000, 3000).iterator().hasNext());
     // Area starts and ends outside
     assertTrue(graph.getPathForArea(-1.3f, 20.3f, -3000, 3000).iterator().hasNext());
-    assertTrue(graph.getPathForArea(20.3f, -1.3f, -3000, 3000).iterator().hasNext());
+    assertFalse(graph.getPathForArea(20.3f, -1.3f, -3000, 3000).iterator().hasNext());
   }
 
   @Test
@@ -110,7 +110,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(0f, 19f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(19f, 0f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -132,27 +131,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -161,7 +139,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(1.3f, 19f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(17.3f, 0f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {3f, 1500f, 1f}, forwards.next());
@@ -182,25 +159,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -209,7 +167,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(0f, 17.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(19f, 1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -229,26 +186,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {16f, 5f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {17f, -683f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -257,7 +194,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(-1.3f, 19f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(20.3f, 0f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -279,27 +215,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -308,7 +223,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(0f, 20.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(19f, -1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -330,27 +244,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -359,7 +252,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(1.3f, 20.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(17.3f, -1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {3f, 1500f, 1f}, forwards.next());
@@ -380,25 +272,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -407,7 +280,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(-1.3f, 17.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(20.3f, 1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -427,26 +299,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {16f, 5f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {17f, -683f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -455,7 +307,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(-1.3f, 20.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(20.3f, -1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {0f, -630f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
@@ -477,27 +328,6 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {18f, -273f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {19f, 229f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {19f, 229f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {18f, -273f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {0f, -630f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 
   @Test
@@ -506,7 +336,6 @@ public class HistogramGraphTest {
         .asList(-630, 288, 809, 1551, 1809, 107, 1737, -1663, -1471, -990, 964, 1580, -1983, 1349,
             -834, 477, 5, -683, -273, 229));
     Iterator<Float[]> forwards = graph.getPathForArea(1.3f, 17.3f, -1500, 1500).iterator();
-    Iterator<Float[]> backwards = graph.getPathForArea(17.3f, 1.3f, -1500, 1500).iterator();
     assertArrayEquals(new Float[] {1f, 288f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {2f, 809f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {3f, 1500f, 1f}, forwards.next());
@@ -525,23 +354,5 @@ public class HistogramGraphTest {
     assertArrayEquals(new Float[] {16f, 5f, 0f}, forwards.next());
     assertArrayEquals(new Float[] {17f, -683f, 0f}, forwards.next());
     assertFalse(forwards.hasNext());
-    assertArrayEquals(new Float[] {17f, -683f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {16f, 5f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {15f, 477f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {14f, -834f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {13f, 1349f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {12f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {11f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {10f, 964f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {9f, -990f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {8f, -1471f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {7f, -1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {6f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {5f, 107f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {4f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {3f, 1500f, 1f}, backwards.next());
-    assertArrayEquals(new Float[] {2f, 809f, 0f}, backwards.next());
-    assertArrayEquals(new Float[] {1f, 288f, 0f}, backwards.next());
-    assertFalse(backwards.hasNext());
   }
 }
