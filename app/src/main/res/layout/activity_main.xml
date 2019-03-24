@@ -6,6 +6,18 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   tools:context=".MainActivity">
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackgroundFloating"
+    android:elevation="2dp"
+    tools:targetApi="lollipop">
+    <com.github.g0retz.chartapp.view.PlotView
+      android:id="@+id/plotView"
+      android:layout_width="match_parent"
+      android:layout_height="360dp"
+      android:padding="24dp"/>
+  </FrameLayout>
   <ListView
     android:id="@+id/graphs"
     android:layout_width="match_parent"
