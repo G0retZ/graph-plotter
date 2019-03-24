@@ -3,5 +3,7 @@
     <color name="colorPrimary">#517da2</color>
     <color name="colorPrimaryDark">#426382</color>
     <color name="colorAccent">#3896d4</color>
-    <color name="colorDivider">#40000000</color>
+    <color name="colorAxis">#10000000</color>
+    <color name="colorLabel">#50000000</color>
+    <color name="colorBackgroundFloating">#ffffff</color>
 </resources>

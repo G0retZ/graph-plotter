@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="PlotNavigator">
+  <declare-styleable name="PlotView">
     <attr
       format="dimension"
-      name="radius"/>
-    <attr
-      format="float"
-      name="inner_radius_ratio"/>
+      name="textSize"/>
     <attr
       format="boolean"
-      name="sum_value_visible"/>
+      name="legend"/>
+    <attr
+      format="dimension"
+      name="strokeWidth"/>
     <attr
       format="boolean"
-      name="values_visible"/>
+      name="horizontalAxis"/>
+    <attr
+      format="boolean"
+      name="verticalAxis"/>
+    <attr
+      format="boolean"
+      name="horizontalGuidelines"/>
+    <attr
+      format="boolean"
+      name="verticalGuidelines"/>
+    <attr
+      format="boolean"
+      name="horizontalTickMarks"/>
+    <attr
+      format="boolean"
+      name="verticalTickMarks"/>
+    <attr
+      format="integer"
+      name="horizontalUnits"/>
+    <attr
+      format="integer"
+      name="verticalUnits"/>
     <attr
       format="color"
-      name="sum_value_color"/>
-    <attr
-      format="float"
-      name="value"/>
+      name="axisColor"/>
     <attr
       format="color"
-      name="value_color"/>
-    <attr
-      format="color"
-      name="empty_color"/>
+      name="labelsColor"/>
   </declare-styleable>
 </resources>
