@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
+import android.graphics.Paint.FontMetrics;
 import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
@@ -52,6 +53,7 @@ public class PlotView extends View {
   private RectF cBounds = new RectF();
   private Rect bounds = new Rect();
   private RectF boundsF = new RectF();
+  private float textHeight;
   private boolean isRtl = false;
 
   private float scaleX = 1;
@@ -254,16 +256,15 @@ public class PlotView extends View {
   }
 
   @Override
-  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    super.onSizeChanged(w, h, oldw, oldh);
-    System.out.println("BOOM!");
+  protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+    super.onSizeChanged(w, h, oldW, oldH);
     if (legend) {
-      axisPaint.getTextBounds("0", 0, "0".length(), bounds);
-      cBounds.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(),
-          getHeight() - getPaddingBottom() - Math.round(bounds.height() * 1.5f));
+      FontMetrics fontMetrics = labelPaint.getFontMetrics();
+      textHeight = fontMetrics.descent - fontMetrics.ascent;
+      cBounds.set(getPaddingLeft(), getPaddingTop(),
+          w - getPaddingRight(), h - getPaddingBottom() - textHeight);
     } else {
-      cBounds.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(),
-          getHeight() - getPaddingBottom());
+      cBounds.set(getPaddingLeft(), getPaddingTop(), w - getPaddingRight(), h - getPaddingBottom());
     }
     if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
       isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
@@ -318,9 +319,12 @@ public class PlotView extends View {
         if (adapter != null) {
           text = adapter.getXLabel(value);
         }
-        labelPaint.getTextBounds(text, 0, text.length(), bounds);
-        canvas.drawText(text, isRtl ? x - bounds.width() : x,
-            cBounds.bottom + bounds.height() * 1.5f, labelPaint);
+        if (isRtl) {
+          labelPaint.getTextBounds(text, 0, text.length(), bounds);
+          canvas.drawText(text, x - bounds.width(), cBounds.bottom + textHeight, labelPaint);
+        } else {
+          canvas.drawText(text, x, cBounds.bottom + textHeight, labelPaint);
+        }
       }
     }
     float incrementY = 1f / (verticalUnits + 1);
@@ -337,9 +341,12 @@ public class PlotView extends View {
         if (adapter != null) {
           text = adapter.getYLabel(value);
         }
-        labelPaint.getTextBounds(text, 0, text.length(), bounds);
-        canvas.drawText(text, isRtl ? cBounds.right - bounds.width() : cBounds.left,
-            y - 0.5f * bounds.height(), labelPaint);
+        if (isRtl) {
+          labelPaint.getTextBounds(text, 0, text.length(), bounds);
+          canvas.drawText(text, cBounds.right - bounds.width(), y - textHeight * 0.5f, labelPaint);
+        } else {
+          canvas.drawText(text, cBounds.left, y - textHeight * 0.5f, labelPaint);
+        }
       }
     }
   }
