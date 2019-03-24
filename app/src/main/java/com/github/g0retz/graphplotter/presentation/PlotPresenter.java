@@ -1,10 +1,10 @@
-package com.github.g0retz.chartapp.presentation;
+package com.github.g0retz.graphplotter.presentation;
 
-import com.github.g0retz.chartapp.gateway.GraphDataGateway;
-import com.github.g0retz.chartapp.model.GraphData;
-import com.github.g0retz.chartapp.util.Consumer;
-import com.github.g0retz.chartapp.util.Disposable;
-import com.github.g0retz.chartapp.view.PlotAdapter;
+import com.github.g0retz.graphplotter.gateway.GraphDataGateway;
+import com.github.g0retz.graphplotter.model.GraphData;
+import com.github.g0retz.graphplotter.util.Consumer;
+import com.github.g0retz.graphplotter.util.Disposable;
+import com.github.g0retz.graphplotter.view.PlotAdapter;
 import java.util.LinkedList;
 import java.util.List;
 

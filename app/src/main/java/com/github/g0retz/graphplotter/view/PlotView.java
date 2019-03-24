@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.view;
+package com.github.g0retz.graphplotter.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.os.Build.VERSION_CODES;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
-import com.github.g0retz.chartapp.R;
+import com.github.g0retz.graphplotter.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

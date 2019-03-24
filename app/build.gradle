@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.github.g0retz.chartapp"
+        applicationId "com.github.g0retz.graphplotter"
         minSdkVersion 14
         targetSdkVersion 28
         versionCode 1

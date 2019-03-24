@@ -1,6 +1,6 @@
-package com.github.g0retz.chartapp.model;
+package com.github.g0retz.graphplotter.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class GraphDataTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorWithEmptyDomain() {
-    new GraphData(new ArrayList<Long>(), Arrays.asList(graph1, graph2, graph3));
+    new GraphData(new ArrayList<>(), Arrays.asList(graph1, graph2, graph3));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -53,6 +53,6 @@ public class GraphDataTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testConstructorWithEmptyCodomain() {
-    new GraphData(Arrays.asList(0L, 1L, 2L), new ArrayList<Graph>());
+    new GraphData(Arrays.asList(0L, 1L, 2L), new ArrayList<>());
   }
 }

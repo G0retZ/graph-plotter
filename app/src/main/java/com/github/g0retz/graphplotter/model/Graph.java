@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.model;
+package com.github.g0retz.graphplotter.model;
 
 import java.util.Collections;
 import java.util.Iterator;

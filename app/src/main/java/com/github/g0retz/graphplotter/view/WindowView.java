@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.view;
+package com.github.g0retz.graphplotter.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -17,7 +17,7 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import com.github.g0retz.chartapp.R;
+import com.github.g0retz.graphplotter.R;
 
 public class WindowView extends View {
 

@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp;
+package com.github.g0retz.graphplotter;
 
 import android.app.Activity;
 import android.app.UiModeManager;
@@ -12,11 +12,11 @@ import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-import com.github.g0retz.chartapp.presentation.PlotPresenter;
-import com.github.g0retz.chartapp.util.Disposable;
-import com.github.g0retz.chartapp.view.PlotAdapter;
-import com.github.g0retz.chartapp.view.PlotView;
-import com.github.g0retz.chartapp.view.WindowView;
+import com.github.g0retz.graphplotter.presentation.PlotPresenter;
+import com.github.g0retz.graphplotter.util.Disposable;
+import com.github.g0retz.graphplotter.view.PlotAdapter;
+import com.github.g0retz.graphplotter.view.PlotView;
+import com.github.g0retz.graphplotter.view.WindowView;
 
 public class MainActivity extends Activity {
 

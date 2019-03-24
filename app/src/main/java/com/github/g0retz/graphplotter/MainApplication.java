@@ -1,8 +1,8 @@
-package com.github.g0retz.chartapp;
+package com.github.g0retz.graphplotter;
 
 import android.app.Application;
-import com.github.g0retz.chartapp.gateway.GraphDataGateway;
-import com.github.g0retz.chartapp.presentation.PlotPresenter;
+import com.github.g0retz.graphplotter.gateway.GraphDataGateway;
+import com.github.g0retz.graphplotter.presentation.PlotPresenter;
 
 public class MainApplication extends Application {
 

@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.view;
+package com.github.g0retz.graphplotter.view;
 
 import android.database.DataSetObservable;
 import android.database.DataSetObserver;
@@ -21,7 +21,7 @@ public abstract class BasePlotAdapter implements PlotAdapter {
    * Notifies the attached observers that the underlying data has been changed and any View
    * reflecting the data set should refresh itself.
    */
-  public void notifyDataSetChanged() {
+  protected void notifyDataSetChanged() {
     mDataSetObservable.notifyChanged();
   }
 
@@ -29,7 +29,7 @@ public abstract class BasePlotAdapter implements PlotAdapter {
    * Notifies the attached observers that the underlying data is no longer valid or available. Once
    * invoked this adapter is no longer valid and should not report further data set changes.
    */
-  public void notifyDataSetInvalidated() {
+  protected void notifyDataSetInvalidated() {
     mDataSetObservable.notifyInvalidated();
   }
 

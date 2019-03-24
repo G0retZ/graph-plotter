@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.util;
+package com.github.g0retz.graphplotter.util;
 
 /**
  * Represents an operation that accepts a single input argument and returns no

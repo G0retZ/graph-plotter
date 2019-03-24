@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.view;
+package com.github.g0retz.graphplotter.view;
 
 import android.database.DataSetObserver;
 

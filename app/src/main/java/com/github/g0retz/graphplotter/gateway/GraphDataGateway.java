@@ -1,16 +1,16 @@
-package com.github.g0retz.chartapp.gateway;
+package com.github.g0retz.graphplotter.gateway;
 
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.Looper;
-import com.github.g0retz.chartapp.model.Graph;
-import com.github.g0retz.chartapp.model.GraphData;
-import com.github.g0retz.chartapp.model.HistogramGraph;
-import com.github.g0retz.chartapp.model.LineGraph;
-import com.github.g0retz.chartapp.util.Consumer;
-import com.github.g0retz.chartapp.util.Disposable;
+import com.github.g0retz.graphplotter.model.Graph;
+import com.github.g0retz.graphplotter.model.GraphData;
+import com.github.g0retz.graphplotter.model.HistogramGraph;
+import com.github.g0retz.graphplotter.model.LineGraph;
+import com.github.g0retz.graphplotter.util.Consumer;
+import com.github.g0retz.graphplotter.util.Disposable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;

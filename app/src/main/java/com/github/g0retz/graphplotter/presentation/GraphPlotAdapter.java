@@ -1,12 +1,12 @@
-package com.github.g0retz.chartapp.presentation;
+package com.github.g0retz.graphplotter.presentation;
 
-import com.github.g0retz.chartapp.model.Graph;
-import com.github.g0retz.chartapp.model.GraphData;
-import com.github.g0retz.chartapp.model.GraphVisitor;
-import com.github.g0retz.chartapp.model.HistogramGraph;
-import com.github.g0retz.chartapp.model.LineGraph;
-import com.github.g0retz.chartapp.view.BasePlotAdapter;
-import com.github.g0retz.chartapp.view.PlotView;
+import com.github.g0retz.graphplotter.model.Graph;
+import com.github.g0retz.graphplotter.model.GraphData;
+import com.github.g0retz.graphplotter.model.GraphVisitor;
+import com.github.g0retz.graphplotter.model.HistogramGraph;
+import com.github.g0retz.graphplotter.model.LineGraph;
+import com.github.g0retz.graphplotter.view.BasePlotAdapter;
+import com.github.g0retz.graphplotter.view.PlotView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

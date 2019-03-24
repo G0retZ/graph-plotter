@@ -1,4 +1,4 @@
-package com.github.g0retz.chartapp.util;
+package com.github.g0retz.graphplotter.util;
 
 public interface Disposable {
 
