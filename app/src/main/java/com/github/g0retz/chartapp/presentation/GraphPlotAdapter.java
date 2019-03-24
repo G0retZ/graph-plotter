@@ -103,7 +103,7 @@ public class GraphPlotAdapter extends BasePlotAdapter {
     long start = graphData.domain.get(0);
     long end = graphData.domain.get(graphData.domain.size() - 1);
     long current = start + Math.round((end - start) * (double) value);
-    return new SimpleDateFormat("MMM dd", Locale.getDefault()).format(new Date(current));
+    return new SimpleDateFormat("MMM d", Locale.getDefault()).format(new Date(current));
   }
 
   @Override

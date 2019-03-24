@@ -265,7 +265,7 @@ public class PlotView extends View {
       FontMetrics fontMetrics = labelPaint.getFontMetrics();
       textHeight = fontMetrics.descent - fontMetrics.ascent;
       cBounds.set(getPaddingLeft(), getPaddingTop(),
-          w - getPaddingRight(), h - getPaddingBottom() - textHeight);
+          w - getPaddingRight(), h - getPaddingBottom() - textHeight * 1.5f);
     } else {
       cBounds.set(getPaddingLeft(), getPaddingTop(), w - getPaddingRight(), h - getPaddingBottom());
     }
@@ -320,7 +320,7 @@ public class PlotView extends View {
       if (legend) {
         String text = String.format(Locale.getDefault(), "%.2f", value);
         if (adapter != null) {
-          text = adapter.getXLabel(value);
+          text = adapter.getXLabel(value * (end - start) + start);
         }
         if (isRtl) {
           labelPaint.getTextBounds(text, 0, text.length(), bounds);
