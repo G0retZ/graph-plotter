@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="4dp"
+  android:padding="16dp"
+  android:background="@color/colorBackgroundFloating"
+  android:elevation="2dp"
+  android:orientation="vertical"
+  tools:targetApi="lollipop">
+  <com.github.g0retz.chartapp.view.PlotView
+    android:id="@+id/plotView"
+    android:layout_width="match_parent"
+    android:layout_height="360dp"
+    android:layout_marginBottom="12dp"/>
+  <FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginBottom="16dp">
+    <com.github.g0retz.chartapp.view.PlotView
+      android:id="@+id/plotControlView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingTop="4dp"
+      android:paddingBottom="4dp"
+      app:horizontalAxis="false"
+      app:horizontalGuidelines="false"
+      app:legend="false"/>
+    <com.github.g0retz.chartapp.view.WindowView
+      android:id="@+id/plotControl"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+  </FrameLayout>
+</LinearLayout>

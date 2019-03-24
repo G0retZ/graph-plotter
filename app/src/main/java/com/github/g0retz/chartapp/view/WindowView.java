@@ -50,6 +50,7 @@ public class WindowView extends View {
     horizontalStrokeWidth = Math.round(2 * context.getResources().getDisplayMetrics().density);
     verticalStrokeWidth = Math.round(6 * context.getResources().getDisplayMetrics().density);
     minDragDistance = Math.round(8 * context.getResources().getDisplayMetrics().density);
+    initPaint();
   }
 
   public WindowView(Context context, AttributeSet attrs) {
@@ -98,6 +99,10 @@ public class WindowView extends View {
     } finally {
       typedArray.recycle();
     }
+    initPaint();
+  }
+
+  private void initPaint() {
     paint = new Paint();
     paint.setDither(false);
     paint.setStyle(Style.FILL);

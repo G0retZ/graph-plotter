@@ -72,6 +72,7 @@ public class PlotView extends View {
     minHeight = Math.round(48 * context.getResources().getDisplayMetrics().density);
     strokeWidth = 2 * context.getResources().getDisplayMetrics().density;
     cachedPaths = new ArrayList<>();
+    initPaints(context);
   }
 
   public PlotView(Context context, AttributeSet attrs) {
@@ -130,7 +131,10 @@ public class PlotView extends View {
     } finally {
       typedArray.recycle();
     }
+    initPaints(context);
+  }
 
+  private void initPaints(Context context) {
     axisPaint = new Paint();
     axisPaint.setDither(false);
     axisPaint.setStyle(Style.STROKE);

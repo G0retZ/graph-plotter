@@ -5,6 +5,7 @@ import android.app.UiModeManager;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.github.g0retz.chartapp.presentation.PlotPresenter;
 import com.github.g0retz.chartapp.util.Disposable;
+import com.github.g0retz.chartapp.view.PlotAdapter;
 import com.github.g0retz.chartapp.view.PlotView;
 import com.github.g0retz.chartapp.view.WindowView;
 
@@ -20,9 +22,6 @@ public class MainActivity extends Activity {
 
   private UiModeManager uiManager;
   Disposable disposable;
-  private PlotView plotView;
-  private PlotView plotControlView;
-  private WindowView plotControl;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +32,29 @@ public class MainActivity extends Activity {
     if (VERSION.SDK_INT < VERSION_CODES.M) {
       uiManager.enableCarMode(0);
     }
-    plotView = findViewById(R.id.plotView);
-    plotControlView = findViewById(R.id.plotControlView);
-    plotControl = findViewById(R.id.plotControl);
     LinearLayout linearLayout = findViewById(R.id.linear);
     PlotPresenter plotPresenter = ((MainApplication) getApplicationContext()).getPlotPresenter();
+    LayoutInflater layoutInflater = getLayoutInflater();
     disposable = plotPresenter.getAdapters(data -> {
-      plotView.setAdapter(data.get(4));
-      plotControlView.setAdapter(data.get(4));
-      for (int i = 0; i < data.get(4).getCount(); i++) {
-        CheckBox child = new CheckBox(this);
-        child.setChecked(data.get(4).isEnabled(i));
-        int finalI = i;
-        child.setOnCheckedChangeListener(
-            (buttonView, isChecked) -> data.get(4).setEnabled(finalI, isChecked));
-        child.setText(data.get(4).getName(i));
-        linearLayout.addView(child);
+      for (PlotAdapter plotAdapter : data) {
+        LinearLayout linearLayout1 = (LinearLayout) layoutInflater.inflate(R.layout.plot, linearLayout, false);
+        PlotView plotView = linearLayout1.findViewById(R.id.plotView);
+        PlotView plotControlView = linearLayout1.findViewById(R.id.plotControlView);
+        WindowView plotControl = linearLayout1.findViewById(R.id.plotControl);
+        plotView.setAdapter(plotAdapter);
+        plotControlView.setAdapter(plotAdapter);
+        plotControl.setOnRangeChangeListener(plotView::setRange);
+        linearLayout.addView(linearLayout1);
+        for (int i = 0; i < plotAdapter.getCount(); i++) {
+          CheckBox child = (CheckBox) layoutInflater.inflate(R.layout.checkbox, linearLayout1, false);
+          child.setChecked(plotAdapter.isEnabled(i));
+          int finalI = i;
+          child.setOnCheckedChangeListener(
+              (buttonView, isChecked) -> plotAdapter.setEnabled(finalI, isChecked));
+          child.setText(plotAdapter.getName(i));
+          linearLayout1.addView(child);
+        }
       }
-      plotControl.setOnRangeChangeListener((s, e) -> plotView.setRange(s, e));
     }, throwable -> {
       throwable.printStackTrace();
       Toast.makeText(this,
