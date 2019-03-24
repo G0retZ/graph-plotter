@@ -34,11 +34,13 @@ public class WindowView extends View {
   private Rect wBounds = new Rect();
   private float restoredLeft = Float.MIN_VALUE;
   private float restoredRight = Float.MIN_VALUE;
+  private float cWidthDivider;
   private Path path = new Path();
   private Paint paint;
   private boolean isRtl = false;
   private float lastX = Float.MIN_VALUE;
   private int borderSelected;
+  private OnRangeChangeListener onRangeChangeListener;
 
   public WindowView(Context context) {
     super(context);
@@ -106,6 +108,9 @@ public class WindowView extends View {
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
     cBounds.set(getPaddingLeft(), getPaddingTop(), w - getPaddingRight(), h - getPaddingBottom());
+    if (cBounds.width() != 0) {
+      cWidthDivider = 1f / cBounds.width();
+    }
     if (wBounds.width() == 0) {
       if (restoredLeft > Float.MIN_VALUE && restoredRight > Float.MIN_VALUE) {
         wBounds.left = cBounds.left + Math.round(cBounds.width() * restoredLeft);
@@ -156,6 +161,14 @@ public class WindowView extends View {
     canvas.drawPath(path, paint);
   }
 
+  public OnRangeChangeListener getOnRangeChangeListener() {
+    return onRangeChangeListener;
+  }
+
+  public void setOnRangeChangeListener(OnRangeChangeListener onRangeChangeListener) {
+    this.onRangeChangeListener = onRangeChangeListener;
+  }
+
   @Override
   @SuppressLint("ClickableViewAccessibility")
   public boolean onTouchEvent(MotionEvent motionEvent) {
@@ -204,8 +217,19 @@ public class WindowView extends View {
                 invalidate();
               }
               break;
+            default:
+              return true;
           }
           lastX = lastX + dX;
+          restoredLeft = (wBounds.left - cBounds.left) * cWidthDivider;
+          restoredRight = (wBounds.right - cBounds.left) * cWidthDivider;
+          if (onRangeChangeListener != null) {
+            if (isRtl) {
+              onRangeChangeListener.onRangeChanged(restoredRight, restoredLeft);
+            } else {
+              onRangeChangeListener.onRangeChanged(restoredLeft, restoredRight);
+            }
+          }
         } else if (lastX >= Float.MIN_VALUE
             && Math.abs(lastX - motionEvent.getX()) >= minDragDistance) {
           drag = true;
@@ -259,8 +283,8 @@ public class WindowView extends View {
 
     SavedState ss = new SavedState(superState);
 
-    ss.left = (wBounds.left - cBounds.left) * 1f / cBounds.width();
-    ss.right = (wBounds.right - cBounds.left) * 1f / cBounds.width();
+    ss.left = restoredLeft;
+    ss.right = restoredRight;
     return ss;
   }
 
@@ -314,5 +338,10 @@ public class WindowView extends View {
       out.setDataPosition(1);
       out.writeFloat(this.right);
     }
+  }
+
+  public interface OnRangeChangeListener {
+
+    void onRangeChanged(float startWeight, float endWeight);
   }
 }
