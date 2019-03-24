@@ -124,6 +124,15 @@ public class WindowView extends View {
           wBounds.set(cBounds.left, cBounds.top, cBounds.left + minWindowWidth, cBounds.bottom);
         }
       }
+      restoredLeft = (wBounds.left - cBounds.left) * cWidthDivider;
+      restoredRight = (wBounds.right - cBounds.left) * cWidthDivider;
+      if (onRangeChangeListener != null) {
+        if (isRtl) {
+          onRangeChangeListener.onRangeChanged(restoredRight, restoredLeft);
+        } else {
+          onRangeChangeListener.onRangeChanged(restoredLeft, restoredRight);
+        }
+      }
     }
   }
 
@@ -159,10 +168,6 @@ public class WindowView extends View {
     path.close();
     paint.setColor(frameColor);
     canvas.drawPath(path, paint);
-  }
-
-  public OnRangeChangeListener getOnRangeChangeListener() {
-    return onRangeChangeListener;
   }
 
   public void setOnRangeChangeListener(OnRangeChangeListener onRangeChangeListener) {
