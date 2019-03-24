@@ -51,6 +51,14 @@ public interface PlotAdapter {
   int getColor(int position);
 
   /**
+   * Get the name of graph that will be plotted for the specified item.
+   *
+   * @param position The position of the item within the adapter's data set whose name we want.
+   * @return A string representing the name of graph.
+   */
+  String getName(int position);
+
+  /**
    * Get points of graph that will be plotted for the specified item.
    *
    * @param position The position of the item within the adapter's data set whose points we want.
