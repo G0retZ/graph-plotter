@@ -56,6 +56,9 @@ public class PlotView extends View {
   private float textHeight;
   private boolean isRtl = false;
 
+  private boolean regenerate;
+  private float start = 0;
+  private float end = 1;
   private float scaleX = 1;
   private float scaleY = 1;
   private float graphScaleX = 1;
@@ -249,7 +252,7 @@ public class PlotView extends View {
       adjustPaths();
       dataSetObserver = new AdapterDataSetObserver();
       adapter.registerDataSetObserver(dataSetObserver);
-
+      regenerate = true;
     }
     invalidate();
     requestLayout();
@@ -280,15 +283,15 @@ public class PlotView extends View {
         if (adapter.isEnabled(i)) {
           switch (adapter.getType(i)) {
             case TYPE_LINE_GRAPH:
-              drawGraph(adapter.getGraphPoints(i), cachedPaths.get(i), canvas, adapter.getColor(i));
+              drawGraph(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
               break;
             case TYPE_HISTOGRAM:
-              drawHistogram(adapter.getGraphPoints(i), cachedPaths.get(i), canvas,
-                  adapter.getColor(i));
+              drawHistogram(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
               break;
           }
         }
       }
+      regenerate = false;
     }
   }
 
@@ -353,16 +356,12 @@ public class PlotView extends View {
 
   private void drawGraph(Iterable<Float[]> points, Path path, Canvas canvas, int color) {
     graphPaint.setColor(color | 0xff000000);
-    if (scaleX != graphScaleX || scaleY != graphScaleY) {
-      scalePath(path, scaleX * graphScaleX, scaleY * graphScaleY);
-    }
-    path.computeBounds(boundsF, false);
-    if (!checkInBounds(boundsF, cBounds)) {
+    if (regenerate) {
       path.reset();
-      float xStep = cBounds.width() / adapter.getXValuesCount();
+      float xStep = cBounds.width() / (adapter.getXValuesCount() * (end - start));
       float yStep = cBounds.height() / adapter.getYValuesCount();
       for (Float[] point : points) {
-        float x = cBounds.left + point[0] * xStep;
+        float x = cBounds.left + (point[0] - adapter.getXValuesCount() * start) * xStep;
         float y = cBounds.bottom - point[1] * yStep;
         if (point[2] == 1) {
           path.moveTo(isRtl ? cBounds.right - x : x, y);
@@ -374,9 +373,11 @@ public class PlotView extends View {
     canvas.drawPath(path, graphPaint);
   }
 
-  private boolean checkInBounds(RectF area, RectF object) {
-    return object.left >= area.left && object.right <= area.right
-        && object.top >= area.top && object.bottom <= area.bottom;
+  public void setRange(float start, float end) {
+    this.start = start;
+    this.end = end;
+    regenerate = true;
+    invalidate();
   }
 
   private void drawHistogram(Iterable<Float[]> points, Path path, Canvas canvas, int color) {
@@ -469,6 +470,7 @@ public class PlotView extends View {
         onRestoreInstanceState(mInstanceState);
         mInstanceState = null;
       }
+      regenerate = true;
       adjustPaths();
       invalidate();
       requestLayout();

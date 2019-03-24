@@ -15,17 +15,24 @@ import java.util.Locale;
 public class GraphPlotAdapter extends BasePlotAdapter {
 
   private final GraphData graphData;
+  private final int domainSize;
+  private final int coDomainSize;
   private int[] types;
   private int maxValue = Integer.MIN_VALUE;
   private int minValue = 0;
+  private boolean[] enabled;
 
   GraphPlotAdapter(GraphData graphData) {
     this.graphData = graphData;
-    types = new int[graphData.coDomain.size()];
+    domainSize = graphData.domain.size();
+    coDomainSize = graphData.coDomain.size();
+    types = new int[coDomainSize];
+    enabled = new boolean[types.length];
     List<Graph> coDomain = graphData.coDomain;
-    for (int i = 0, coDomainSize = coDomain.size(); i < coDomainSize; i++) {
+    for (int i = 0; i < coDomainSize; i++) {
       Graph graph = coDomain.get(i);
       int finalI = i;
+      enabled[i] = true;
       graph.visit(new GraphVisitor() {
         @Override
         public void visit(LineGraph lineGraph) {
@@ -72,9 +79,23 @@ public class GraphPlotAdapter extends BasePlotAdapter {
   }
 
   @Override
-  public Iterable<Float[]> getGraphPoints(int position) {
+  public Iterable<Float[]> getGraphPoints(int position, float start, float end) {
     Graph graph = graphData.coDomain.get(position);
-    return graph.getPathForArea(0, graphData.domain.size(), graph.minValue, graph.maxValue);
+    return graph.getPathForArea(
+        domainSize * start, domainSize * end, graph.minValue, graph.maxValue);
+  }
+
+  @Override
+  public boolean isEnabled(int position) {
+    return enabled[position];
+  }
+
+  @Override
+  public void setEnabled(int position, boolean enabled) {
+    if (this.enabled[position] != enabled) {
+      this.enabled[position] = enabled;
+      notifyDataSetChanged();
+    }
   }
 
   @Override
@@ -92,7 +113,7 @@ public class GraphPlotAdapter extends BasePlotAdapter {
 
   @Override
   public int getXValuesCount() {
-    return graphData.domain.size();
+    return domainSize;
   }
 
   @Override

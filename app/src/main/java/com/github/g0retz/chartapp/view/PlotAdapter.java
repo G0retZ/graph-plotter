@@ -62,13 +62,14 @@ public interface PlotAdapter {
    * Get points of graph that will be plotted for the specified item.
    *
    * @param position The position of the item within the adapter's data set whose points we want.
+   * @param start The start of the graph from 0.0 to 1.0
+   * @param end The end of the graph from 0.0 to 1.0
    * @return An Iterable representing the points of graph.
    */
-  Iterable<Float[]> getGraphPoints(int position);
+  Iterable<Float[]> getGraphPoints(int position, float start, float end);
 
   /**
-   * Returns true if the item at the specified position is not a separator.
-   * (A separator is a non-selectable, non-clickable item).
+   * Returns true if the item at the specified position is enabled.
    *
    * The result is unspecified if position is invalid. An {@link ArrayIndexOutOfBoundsException}
    * should be thrown in that case for fast failure.
@@ -78,6 +79,17 @@ public interface PlotAdapter {
    * @return True if the item is not a separator
    */
   boolean isEnabled(int position);
+
+  /**
+   * Enable or Disable the item at the specified position.
+   *
+   * The result is unspecified if position is invalid. An {@link ArrayIndexOutOfBoundsException}
+   * should be thrown in that case for fast failure.
+   *
+   * @param position Index of the item
+   * @param enabled new state of the item
+   */
+  void setEnabled(int position, boolean enabled);
 
   String getXLabel(float value);
 

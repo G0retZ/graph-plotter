@@ -38,6 +38,10 @@ public abstract class BasePlotAdapter implements PlotAdapter {
     return true;
   }
 
+  @Override
+  public void setEnabled(int position, boolean enabled) {
+  }
+
   public boolean isEmpty() {
     return getCount() == 0;
   }
