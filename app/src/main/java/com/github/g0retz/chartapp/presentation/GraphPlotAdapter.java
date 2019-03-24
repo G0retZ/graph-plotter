@@ -79,10 +79,9 @@ public class GraphPlotAdapter extends BasePlotAdapter {
   }
 
   @Override
-  public Iterable<Float[]> getGraphPoints(int position, float start, float end) {
+  public Iterable<Float[]> getGraphPoints(int position) {
     Graph graph = graphData.coDomain.get(position);
-    return graph.getPathForArea(
-        domainSize * start, domainSize * end, graph.minValue, graph.maxValue);
+    return graph.getPathForArea(0, domainSize, graph.minValue, graph.maxValue);
   }
 
   @Override

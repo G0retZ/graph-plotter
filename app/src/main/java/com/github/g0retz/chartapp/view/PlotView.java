@@ -283,10 +283,10 @@ public class PlotView extends View {
         if (adapter.isEnabled(i)) {
           switch (adapter.getType(i)) {
             case TYPE_LINE_GRAPH:
-              drawGraph(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
+              drawGraph(adapter.getGraphPoints(i), cachedPaths.get(i), canvas, adapter.getColor(i));
               break;
             case TYPE_HISTOGRAM:
-              drawHistogram(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
+              drawHistogram(adapter.getGraphPoints(i), cachedPaths.get(i), canvas, adapter.getColor(i));
               break;
           }
         }
@@ -358,10 +358,10 @@ public class PlotView extends View {
     graphPaint.setColor(color | 0xff000000);
     if (regenerate) {
       path.reset();
-      float xStep = cBounds.width() / (adapter.getXValuesCount() * (end - start));
+      float xStep = cBounds.width() / (adapter.getXValuesCount());
       float yStep = cBounds.height() / adapter.getYValuesCount();
       for (Float[] point : points) {
-        float x = cBounds.left + (point[0] - adapter.getXValuesCount() * start) * xStep;
+        float x = cBounds.left + point[0] * xStep;
         float y = cBounds.bottom - point[1] * yStep;
         if (point[2] == 1) {
           path.moveTo(isRtl ? cBounds.right - x : x, y);
@@ -369,43 +369,45 @@ public class PlotView extends View {
           path.lineTo(isRtl ? cBounds.right - x : x, y);
         }
       }
+      scalePath(path, graphScaleX, graphScaleY);
     }
     canvas.drawPath(path, graphPaint);
   }
 
   public void setRange(float start, float end) {
+    float dx;
+    if (isRtl) {
+      dx = this.end - end;
+    } else {
+      dx = this.start - start;
+    }
     this.start = start;
     this.end = end;
-    regenerate = true;
+    float newScale = 1 / (graphScaleX * (end - start));
+    graphScaleX = 1 / (end - start);
+    for (Path path : cachedPaths) {
+      if (newScale != 1) {
+        scalePath(path, newScale, scaleY);
+      }
+      movePath(path, dx);
+    }
     invalidate();
   }
 
   private void drawHistogram(Iterable<Float[]> points, Path path, Canvas canvas, int color) {
-//    cachedPaths.reset();
-//    cachedPaths.arcTo(outerCircle, start, sweep, false);
-//    cachedPaths.arcTo(innerCircle, start + sweep, -sweep, false);
-//    cachedPaths.close();
-//    canvas.drawPath(cachedPaths, paint);
-//    if (text != null && valuesVisible) {
-//      paint.setColor(textColor);
-//      paint.setTextSize(calculatedRadius * 0.2f);
-//      float angle = start + sweep / 2;
-//      Rect r = new Rect();
-//      paint.getTextBounds(text, 0, text.length(), r);
-//      float xOffset = r.width() / 2f;
-//      float yOffset = r.height() / 2f;
-//      float x = calculatedRadius * 0.8f * (float) Math.cos(angle * Math.PI / 180);
-//      float y = calculatedRadius * 0.8f * (float) Math.sin(angle * Math.PI / 180);
-//      canvas.drawText(text, x - xOffset + canvas.getWidth() / 2f,
-//          y + yOffset + canvas.getHeight() / 2f, paint);
-//    }
   }
 
   private void scalePath(Path path, float scaleX, float scaleY) {
     Matrix scaleMatrix = new Matrix();
-    RectF rectF = new RectF();
-    path.computeBounds(rectF, true);
-    scaleMatrix.setScale(scaleX, scaleY, rectF.centerX(), rectF.centerY());
+    path.computeBounds(boundsF, true);
+    scaleMatrix.setScale(scaleX, scaleY, boundsF.centerX(), boundsF.centerY());
+    path.transform(scaleMatrix);
+  }
+
+  private void movePath(Path path, float scaleX) {
+    Matrix scaleMatrix = new Matrix();
+    path.computeBounds(boundsF, true);
+    scaleMatrix.setTranslate(-boundsF.left * scaleX, boundsF.top);
     path.transform(scaleMatrix);
   }
 

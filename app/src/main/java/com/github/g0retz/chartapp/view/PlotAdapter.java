@@ -62,11 +62,9 @@ public interface PlotAdapter {
    * Get points of graph that will be plotted for the specified item.
    *
    * @param position The position of the item within the adapter's data set whose points we want.
-   * @param start The start of the graph from 0.0 to 1.0
-   * @param end The end of the graph from 0.0 to 1.0
    * @return An Iterable representing the points of graph.
    */
-  Iterable<Float[]> getGraphPoints(int position, float start, float end);
+  Iterable<Float[]> getGraphPoints(int position);
 
   /**
    * Returns true if the item at the specified position is enabled.
