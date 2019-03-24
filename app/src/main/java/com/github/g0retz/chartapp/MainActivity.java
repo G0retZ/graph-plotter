@@ -8,10 +8,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+import com.github.g0retz.chartapp.presentation.PlotPresenter;
+import com.github.g0retz.chartapp.util.Disposable;
+import com.github.g0retz.chartapp.view.PlotView;
 
 public class MainActivity extends Activity {
 
   private UiModeManager uiManager;
+  Disposable disposable;
+  private PlotView plotView;
+  private PlotView plotControlView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +29,26 @@ public class MainActivity extends Activity {
     if (VERSION.SDK_INT < VERSION_CODES.M) {
       uiManager.enableCarMode(0);
     }
+    plotView = findViewById(R.id.plotView);
+    plotControlView = findViewById(R.id.plotControlView);
+    PlotPresenter plotPresenter = ((MainApplication) getApplicationContext()).getPlotPresenter();
+    disposable = plotPresenter.getAdapters(data -> {
+      plotView.setAdapter(data.get(4));
+      plotControlView.setAdapter(data.get(4));
+    }, throwable -> {
+      throwable.printStackTrace();
+      Toast.makeText(this,
+          String.format("%s: %s", throwable.getClass().getSimpleName(), throwable.getMessage()),
+          Toast.LENGTH_LONG).show();
+    });
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (disposable != null) {
+      disposable.dispose();
+    }
+    super.onDestroy();
   }
 
   @Override
