@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.github.g0retz.chartapp.R;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -255,20 +254,25 @@ public class PlotView extends View {
   }
 
   @Override
-  protected void onDraw(Canvas canvas) {
-    super.onDraw(canvas);
+  protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    System.out.println("BOOM!");
     if (legend) {
       axisPaint.getTextBounds("0", 0, "0".length(), bounds);
       cBounds.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(),
           getHeight() - getPaddingBottom() - Math.round(bounds.height() * 1.5f));
     } else {
-      cBounds.set(getPaddingRight(), getPaddingTop(), getWidth() - getPaddingRight(),
+      cBounds.set(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(),
           getHeight() - getPaddingBottom());
     }
     if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
       isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
     }
+  }
 
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
     drawAxises(canvas);
     if (adapter != null) {
       for (int i = 0; i < adapter.getCount(); i++) {
@@ -276,9 +280,11 @@ public class PlotView extends View {
           switch (adapter.getType(i)) {
             case TYPE_LINE_GRAPH:
               drawGraph(adapter.getGraphPoints(i), cachedPaths.get(i), canvas, adapter.getColor(i));
+              break;
             case TYPE_HISTOGRAM:
               drawHistogram(adapter.getGraphPoints(i), cachedPaths.get(i), canvas,
                   adapter.getColor(i));
+              break;
           }
         }
       }
@@ -353,10 +359,8 @@ public class PlotView extends View {
         float y = cBounds.bottom - point[1] * yStep;
         if (point[2] == 1) {
           path.moveTo(isRtl ? cBounds.right - x : x, y);
-          System.out.printf("Move to %s%n", Arrays.toString(point));
         } else {
           path.lineTo(isRtl ? cBounds.right - x : x, y);
-          System.out.printf("Line to %s%n", Arrays.toString(point));
         }
       }
     }
