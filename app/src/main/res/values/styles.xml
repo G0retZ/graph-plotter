@@ -1,15 +1,17 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+  <style name="AppTheme" parent="Theme.Holo.DayNight">
     <!-- Customize your theme here. -->
     <item name="android:actionBarStyle">@style/MyActionBar</item>
     <item name="axisColor">@color/colorAxis</item>
     <item name="labelsColor">@color/colorLabel</item>
+    <item name="mistColor">@color/colorMist</item>
+    <item name="frameColor">@color/colorFrame</item>
   </style>
 
   <!-- ActionBar styles -->
-  <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+  <style name="MyActionBar" parent="Widget.Holo.DayNight.ActionBar">
     <item name="android:background">@color/colorPrimary</item>
   </style>
 </resources>

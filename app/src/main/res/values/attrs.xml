@@ -41,4 +41,12 @@
       format="color"
       name="labelsColor"/>
   </declare-styleable>
+  <declare-styleable name="WindowView">
+    <attr
+      format="color"
+      name="frameColor"/>
+    <attr
+      format="color"
+      name="mistColor"/>
+  </declare-styleable>
 </resources>

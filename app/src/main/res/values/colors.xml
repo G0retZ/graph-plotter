@@ -5,5 +5,7 @@
     <color name="colorAccent">#3896d4</color>
     <color name="colorAxis">#10000000</color>
     <color name="colorLabel">#50000000</color>
+    <color name="colorMist">#10517da2</color>
+    <color name="colorFrame">#30517da2</color>
     <color name="colorBackgroundFloating">#ffffff</color>
 </resources>

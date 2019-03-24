@@ -1,0 +1,8 @@
+<resources>
+
+  <!-- Base application theme. -->
+  <style name="Theme.Holo.DayNight" parent="@android:style/Theme.Holo"/>
+
+  <!-- ActionBar styles -->
+  <style name="Widget.Holo.DayNight.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid"/>
+</resources>

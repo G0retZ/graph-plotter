@@ -1,0 +1,5 @@
+<resources>
+
+  <!-- Base application theme. -->
+  <style name="Theme.Material.DayNight" parent="@android:style/Theme.Material"/>
+</resources>

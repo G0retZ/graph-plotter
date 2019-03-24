@@ -4,9 +4,10 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:orientation="vertical"
   tools:context=".MainActivity">
-  <FrameLayout
+  <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBackgroundFloating"
@@ -17,7 +18,25 @@
       android:layout_width="match_parent"
       android:layout_height="360dp"
       android:padding="24dp"/>
-  </FrameLayout>
+    <com.github.g0retz.chartapp.view.PlotView
+      android:id="@+id/plotControlView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"
+      android:layout_marginEnd="24dp"
+      android:layout_below="@id/plotView"
+      android:paddingTop="4dp"
+      android:paddingBottom="4dp"
+      app:horizontalAxis="false"
+      app:horizontalGuidelines="false"
+      app:legend="false"/>
+    <com.github.g0retz.chartapp.view.WindowView
+      android:id="@+id/plotControl"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="24dp"      android:layout_marginEnd="24dp"
+      android:layout_below="@id/plotView"/>
+  </RelativeLayout>
   <ListView
     android:id="@+id/graphs"
     android:layout_width="match_parent"

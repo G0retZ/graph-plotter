@@ -3,7 +3,9 @@
     <color name="colorPrimary">#212d3b</color>
     <color name="colorPrimaryDark">#1a242e</color>
     <color name="colorAccent">#3896d4</color>
-    <color name="colorAxis">#10ffffff</color>
+    <color name="colorAxis">#40000000</color>
     <color name="colorLabel">#50ffffff</color>
+    <color name="colorMist">#40000000</color>
+    <color name="colorFrame">#50517da2</color>
     <color name="colorBackgroundFloating">#ff1D2733</color>
 </resources>
