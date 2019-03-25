@@ -96,6 +96,20 @@ public class GraphPlotAdapter extends BasePlotAdapter {
       this.enabled[position] = enabled;
       notifyDataSetChanged();
     }
+    maxValue = Integer.MIN_VALUE;
+    minValue = 0;
+    List<Graph> coDomain = graphData.coDomain;
+    for (int i = 0; i < coDomainSize; i++) {
+      Graph graph = coDomain.get(i);
+      if (this.enabled[i]) {
+        if (maxValue < graph.maxValue) {
+          maxValue = graph.maxValue;
+        }
+        if (minValue < graph.minValue) {
+          minValue = graph.minValue;
+        }
+      }
+    }
   }
 
   @Override
