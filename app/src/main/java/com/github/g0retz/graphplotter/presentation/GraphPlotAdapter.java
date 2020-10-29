@@ -122,7 +122,7 @@ public class GraphPlotAdapter extends BasePlotAdapter {
 
   @Override
   public String getYLabel(float value) {
-    return String.valueOf(Math.round(maxValue * value));
+    return String.valueOf(Math.round(Math.max(maxValue, 1) * value));
   }
 
   @Override

@@ -46,7 +46,7 @@ public class LineGraph extends Graph {
     if (pos < position) {
       pos++;
     }
-    if (result[1] == null || !checkPointClipping(result[1], min, max)) {
+    if (result[1] == Float.MIN_VALUE || !checkPointClipping(result[1], min, max)) {
       pos--;
       int last = values.size() - 1;
       while (pos <= end && pos < last) {
@@ -97,18 +97,18 @@ public class LineGraph extends Graph {
     }
   }
 
-  private Float getValue(float position) {
+  private float getValue(float position) {
     if (!checkPointClipping(position, 0, values.size() - 1)) {
-      return null;
+      return Float.MIN_VALUE;
     }
     int x11 = (int) position;
     int y1 = values.get(x11);
     if (position == x11) {
-      return (float) y1;
+      return y1;
     }
     int y2 = values.get(x11 + 1);
     if (position == x11 + 1) {
-      return (float) y2;
+      return y2;
     }
     return (y2 - y1) * (position - x11) + y1;
   }

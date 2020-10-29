@@ -52,7 +52,6 @@ public class PlotView extends View {
   private Paint graphPaint;
   private RectF cBounds = new RectF();
   private Rect bounds = new Rect();
-  private RectF boundsF = new RectF();
   private float textHeight;
   private boolean isRtl = false;
 
@@ -65,6 +64,12 @@ public class PlotView extends View {
   private float graphScaleY = 1;
 
   private List<Path> cachedPaths;
+  private float[] cachedHGuideLines;
+  private float[] cachedVGuideLines;
+  private String[] cachedHLabels;
+  private String[] cachedVLabels;
+  private float[] cachedHLabelsWidths;
+  private float[] cachedVLabelsWidths;
 
   public PlotView(Context context) {
     super(context);
@@ -276,6 +281,8 @@ public class PlotView extends View {
     if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
       isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
     }
+    updateVLabels(updateHGuidelines(Float.MIN_VALUE));
+    updateHLabels(updateVGuidelines(Float.MIN_VALUE));
   }
 
   @Override
@@ -299,6 +306,64 @@ public class PlotView extends View {
     }
   }
 
+  private float updateVLabels(float increment) {
+    increment = increment == Float.MAX_VALUE ? increment : 1f / (verticalUnits + 1);
+    if (!legend) {
+      return increment;
+    }
+    cachedVLabels = new String[verticalUnits + 1];
+    cachedVLabelsWidths = new float[verticalUnits + 1];
+    for (int value = 0; value < verticalUnits + 1; value++) {
+      cachedVLabels[value] = String.format(Locale.getDefault(), "%.2f", value * increment);
+      if (adapter != null) {
+          cachedVLabels[value] = adapter.getYLabel(value);
+      }
+      labelPaint.getTextBounds(cachedVLabels[value], 0, cachedVLabels[value].length(), bounds);
+      cachedVLabelsWidths[value] = bounds.width();
+    }
+    return increment;
+  }
+
+  private float updateHLabels(float increment) {
+    increment = increment == Float.MAX_VALUE ? increment : 1f / (horizontalUnits + 1);
+    if (!legend) {
+      return increment;
+    }
+    cachedHLabels = new String[horizontalUnits + 1];
+    cachedHLabelsWidths = new float[horizontalUnits + 1];
+    for (int value = 0; value < horizontalUnits + 1; value++) {
+      cachedHLabels[value] = String.format(Locale.getDefault(), "%.2f", value * increment);
+      if (adapter != null) {
+          cachedHLabels[value] = adapter.getXLabel(value * (end - start) * increment + start);
+      }
+      labelPaint.getTextBounds(cachedHLabels[value], 0, cachedHLabels[value].length(), bounds);
+      cachedHLabelsWidths[value] = bounds.width();
+    }
+    return increment;
+  }
+
+  private float updateVGuidelines(float increment) {
+    increment = increment == Float.MAX_VALUE ? increment : 1f / (horizontalUnits + 1);
+    cachedVGuideLines = new float[horizontalUnits + 1];
+    for (int value = 0; value < horizontalUnits + 1; value++) {
+      if (isRtl) {
+        cachedVGuideLines[value] = cBounds.right - cBounds.width() * value * increment;
+      } else {
+        cachedVGuideLines[value] = cBounds.left + cBounds.width() * value * increment;
+      }
+    }
+    return increment;
+  }
+
+  private float updateHGuidelines(float increment) {
+    increment = increment == Float.MAX_VALUE ? increment : 1f / (verticalUnits + 1);
+    cachedHGuideLines = new float[verticalUnits + 1];
+    for (int value = 0; value < verticalUnits + 1; value++) {
+      cachedHGuideLines[value] = cBounds.bottom - cBounds.height() * value * increment;
+    }
+    return increment;
+  }
+
   private void drawAxises(Canvas canvas) {
     if (horizontalAxis) {
       canvas.drawLine(cBounds.left, cBounds.bottom, cBounds.right, cBounds.bottom, axisPaint);
@@ -307,52 +372,35 @@ public class PlotView extends View {
       canvas.drawLine(isRtl ? cBounds.right : cBounds.left, cBounds.top,
           isRtl ? cBounds.right : cBounds.left, cBounds.bottom, axisPaint);
     }
-    float incrementX = 1f / (horizontalUnits + 1);
-    for (float value = 0; value < 1; value += incrementX) {
-      float x;
-      if (isRtl) {
-        x = cBounds.right - cBounds.width() * value;
-      } else {
-        x = cBounds.left + cBounds.width() * value;
-      }
-      if (verticalGuidelines && value > 0) {
-        canvas.drawLine(x, cBounds.top, x, cBounds.bottom, axisPaint);
+    for(int i = 0; i < cachedVGuideLines.length; i++) {
+      if (verticalGuidelines && i > 0) {
+        canvas.drawLine(cachedVGuideLines[i], cBounds.top, cachedVGuideLines[i], cBounds.bottom, axisPaint);
       }
       if (horizontalTickMarks) {
-        canvas.drawCircle(x, cBounds.bottom, strokeWidth, axisPaint);
+        canvas.drawCircle(cachedVGuideLines[i], cBounds.bottom, strokeWidth, axisPaint);
       }
       if (legend) {
-        String text = String.format(Locale.getDefault(), "%.2f", value);
-        if (adapter != null) {
-          text = adapter.getXLabel(value * (end - start) + start);
-        }
         if (isRtl) {
-          labelPaint.getTextBounds(text, 0, text.length(), bounds);
-          canvas.drawText(text, x - bounds.width(), cBounds.bottom + textHeight, labelPaint);
+          canvas.drawText(cachedHLabels[i], cachedVGuideLines[i] - cachedHLabelsWidths[i],
+                  cBounds.bottom + textHeight, labelPaint);
         } else {
-          canvas.drawText(text, x, cBounds.bottom + textHeight, labelPaint);
+          canvas.drawText(cachedHLabels[i], cachedVGuideLines[i], cBounds.bottom + textHeight, labelPaint);
         }
       }
     }
-    float incrementY = 1f / (verticalUnits + 1);
-    for (float value = 0; value < 1; value += incrementY) {
-      float y = cBounds.bottom - cBounds.height() * value;
-      if (horizontalGuidelines && value > 0) {
-        canvas.drawLine(cBounds.left, y, cBounds.right, y, axisPaint);
+    for (int i = 0; i < cachedHGuideLines.length; i++) {
+      if (horizontalGuidelines && i > 0) {
+        canvas.drawLine(cBounds.left, cachedHGuideLines[i], cBounds.right, cachedHGuideLines[i], axisPaint);
       }
       if (verticalTickMarks) {
-        canvas.drawCircle(isRtl ? cBounds.right : cBounds.left, y, strokeWidth, axisPaint);
+        canvas.drawCircle(isRtl ? cBounds.right : cBounds.left, cachedHGuideLines[i], strokeWidth, axisPaint);
       }
       if (legend) {
-        String text = String.format(Locale.getDefault(), "%.2f", value);
-        if (adapter != null) {
-          text = adapter.getYLabel(value);
-        }
         if (isRtl) {
-          labelPaint.getTextBounds(text, 0, text.length(), bounds);
-          canvas.drawText(text, cBounds.right - bounds.width(), y - textHeight * 0.5f, labelPaint);
+          canvas.drawText(cachedVLabels[i], cBounds.right - cachedVLabelsWidths[i],
+                  cachedHGuideLines[i] - textHeight * 0.5f, labelPaint);
         } else {
-          canvas.drawText(text, cBounds.left, y - textHeight * 0.5f, labelPaint);
+          canvas.drawText(cachedVLabels[i], cBounds.left, cachedHGuideLines[i] - textHeight * 0.5f, labelPaint);
         }
       }
     }
@@ -381,6 +429,8 @@ public class PlotView extends View {
     this.start = start;
     this.end = end;
     regenerate = true;
+    updateVLabels(Float.MIN_VALUE);
+    updateHLabels(Float.MIN_VALUE);
     invalidate();
   }
 
@@ -476,8 +526,9 @@ public class PlotView extends View {
       }
       regenerate = true;
       adjustPaths();
+      updateVLabels(Float.MIN_VALUE);
+      updateHLabels(Float.MIN_VALUE);
       invalidate();
-      requestLayout();
     }
 
     @Override
