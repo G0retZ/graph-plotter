@@ -1,6 +1,5 @@
 package com.github.g0retz.graphplotter.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -14,9 +13,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -97,7 +93,6 @@ public class PlotView extends View {
     init(context, typedArray);
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public PlotView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     TypedArray typedArray = context.getTheme().obtainStyledAttributes(
@@ -278,9 +273,7 @@ public class PlotView extends View {
     } else {
       cBounds.set(getPaddingLeft(), getPaddingTop(), w - getPaddingRight(), h - getPaddingBottom());
     }
-    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-      isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
-    }
+    isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
     updateVLabels(updateHGuidelines(Float.MIN_VALUE));
     updateHLabels(updateVGuidelines(Float.MIN_VALUE));
   }
@@ -294,10 +287,12 @@ public class PlotView extends View {
         if (adapter.isEnabled(i)) {
           switch (adapter.getType(i)) {
             case TYPE_LINE_GRAPH:
-              drawGraph(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
+              drawGraph(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas,
+                  adapter.getColor(i));
               break;
             case TYPE_HISTOGRAM:
-              drawHistogram(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas, adapter.getColor(i));
+              drawHistogram(adapter.getGraphPoints(i, start, end), cachedPaths.get(i), canvas,
+                  adapter.getColor(i));
               break;
           }
         }
@@ -316,7 +311,7 @@ public class PlotView extends View {
     for (int value = 0; value < verticalUnits + 1; value++) {
       cachedVLabels[value] = String.format(Locale.getDefault(), "%.2f", value * increment);
       if (adapter != null) {
-          cachedVLabels[value] = adapter.getYLabel(value);
+        cachedVLabels[value] = adapter.getYLabel(value);
       }
       labelPaint.getTextBounds(cachedVLabels[value], 0, cachedVLabels[value].length(), bounds);
       cachedVLabelsWidths[value] = bounds.width();
@@ -334,7 +329,7 @@ public class PlotView extends View {
     for (int value = 0; value < horizontalUnits + 1; value++) {
       cachedHLabels[value] = String.format(Locale.getDefault(), "%.2f", value * increment);
       if (adapter != null) {
-          cachedHLabels[value] = adapter.getXLabel(value * (end - start) * increment + start);
+        cachedHLabels[value] = adapter.getXLabel(value * (end - start) * increment + start);
       }
       labelPaint.getTextBounds(cachedHLabels[value], 0, cachedHLabels[value].length(), bounds);
       cachedHLabelsWidths[value] = bounds.width();
@@ -372,9 +367,10 @@ public class PlotView extends View {
       canvas.drawLine(isRtl ? cBounds.right : cBounds.left, cBounds.top,
           isRtl ? cBounds.right : cBounds.left, cBounds.bottom, axisPaint);
     }
-    for(int i = 0; i < cachedVGuideLines.length; i++) {
+    for (int i = 0; i < cachedVGuideLines.length; i++) {
       if (verticalGuidelines && i > 0) {
-        canvas.drawLine(cachedVGuideLines[i], cBounds.top, cachedVGuideLines[i], cBounds.bottom, axisPaint);
+        canvas.drawLine(cachedVGuideLines[i], cBounds.top, cachedVGuideLines[i], cBounds.bottom,
+            axisPaint);
       }
       if (horizontalTickMarks) {
         canvas.drawCircle(cachedVGuideLines[i], cBounds.bottom, strokeWidth, axisPaint);
@@ -382,25 +378,29 @@ public class PlotView extends View {
       if (legend) {
         if (isRtl) {
           canvas.drawText(cachedHLabels[i], cachedVGuideLines[i] - cachedHLabelsWidths[i],
-                  cBounds.bottom + textHeight, labelPaint);
+              cBounds.bottom + textHeight, labelPaint);
         } else {
-          canvas.drawText(cachedHLabels[i], cachedVGuideLines[i], cBounds.bottom + textHeight, labelPaint);
+          canvas.drawText(cachedHLabels[i], cachedVGuideLines[i], cBounds.bottom + textHeight,
+              labelPaint);
         }
       }
     }
     for (int i = 0; i < cachedHGuideLines.length; i++) {
       if (horizontalGuidelines && i > 0) {
-        canvas.drawLine(cBounds.left, cachedHGuideLines[i], cBounds.right, cachedHGuideLines[i], axisPaint);
+        canvas.drawLine(cBounds.left, cachedHGuideLines[i], cBounds.right, cachedHGuideLines[i],
+            axisPaint);
       }
       if (verticalTickMarks) {
-        canvas.drawCircle(isRtl ? cBounds.right : cBounds.left, cachedHGuideLines[i], strokeWidth, axisPaint);
+        canvas.drawCircle(isRtl ? cBounds.right : cBounds.left, cachedHGuideLines[i], strokeWidth,
+            axisPaint);
       }
       if (legend) {
         if (isRtl) {
           canvas.drawText(cachedVLabels[i], cBounds.right - cachedVLabelsWidths[i],
-                  cachedHGuideLines[i] - textHeight * 0.5f, labelPaint);
+              cachedHGuideLines[i] - textHeight * 0.5f, labelPaint);
         } else {
-          canvas.drawText(cachedVLabels[i], cBounds.left, cachedHGuideLines[i] - textHeight * 0.5f, labelPaint);
+          canvas.drawText(cachedVLabels[i], cBounds.left, cachedHGuideLines[i] - textHeight * 0.5f,
+              labelPaint);
         }
       }
     }
@@ -435,24 +435,24 @@ public class PlotView extends View {
   }
 
   private void drawHistogram(Iterable<Float[]> points, Path path, Canvas canvas, int color) {
-//    cachedPaths.reset();
-//    cachedPaths.arcTo(outerCircle, start, sweep, false);
-//    cachedPaths.arcTo(innerCircle, start + sweep, -sweep, false);
-//    cachedPaths.close();
-//    canvas.drawPath(cachedPaths, paint);
-//    if (text != null && valuesVisible) {
-//      paint.setColor(textColor);
-//      paint.setTextSize(calculatedRadius * 0.2f);
-//      float angle = start + sweep / 2;
-//      Rect r = new Rect();
-//      paint.getTextBounds(text, 0, text.length(), r);
-//      float xOffset = r.width() / 2f;
-//      float yOffset = r.height() / 2f;
-//      float x = calculatedRadius * 0.8f * (float) Math.cos(angle * Math.PI / 180);
-//      float y = calculatedRadius * 0.8f * (float) Math.sin(angle * Math.PI / 180);
-//      canvas.drawText(text, x - xOffset + canvas.getWidth() / 2f,
-//          y + yOffset + canvas.getHeight() / 2f, paint);
-//    }
+    //    cachedPaths.reset();
+    //    cachedPaths.arcTo(outerCircle, start, sweep, false);
+    //    cachedPaths.arcTo(innerCircle, start + sweep, -sweep, false);
+    //    cachedPaths.close();
+    //    canvas.drawPath(cachedPaths, paint);
+    //    if (text != null && valuesVisible) {
+    //      paint.setColor(textColor);
+    //      paint.setTextSize(calculatedRadius * 0.2f);
+    //      float angle = start + sweep / 2;
+    //      Rect r = new Rect();
+    //      paint.getTextBounds(text, 0, text.length(), r);
+    //      float xOffset = r.width() / 2f;
+    //      float yOffset = r.height() / 2f;
+    //      float x = calculatedRadius * 0.8f * (float) Math.cos(angle * Math.PI / 180);
+    //      float y = calculatedRadius * 0.8f * (float) Math.sin(angle * Math.PI / 180);
+    //      canvas.drawText(text, x - xOffset + canvas.getWidth() / 2f,
+    //          y + yOffset + canvas.getHeight() / 2f, paint);
+    //    }
   }
 
   private void scalePath(Path path, float scaleX, float scaleY) {

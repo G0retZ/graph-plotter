@@ -1,7 +1,6 @@
 package com.github.g0retz.graphplotter.view;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,8 +9,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.Path.FillType;
 import android.graphics.Rect;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -74,7 +71,6 @@ public class WindowView extends View {
     init(typedArray);
   }
 
-  @TargetApi(VERSION_CODES.LOLLIPOP)
   public WindowView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     TypedArray typedArray = context.getTheme().obtainStyledAttributes(
@@ -144,9 +140,7 @@ public class WindowView extends View {
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR1) {
-      isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
-    }
+    isRtl = getLayoutDirection() == LAYOUT_DIRECTION_RTL;
     path.reset();
     path.moveTo(cBounds.left, cBounds.top);
     path.lineTo(cBounds.left, cBounds.bottom);
@@ -316,7 +310,7 @@ public class WindowView extends View {
 
     //required field that makes Parcelables from a Parcel
     public static final Parcelable.Creator<SavedState> CREATOR =
-        new Parcelable.Creator<SavedState>() {
+        new Parcelable.Creator<>() {
           public SavedState createFromParcel(Parcel in) {
             return new SavedState(in);
           }

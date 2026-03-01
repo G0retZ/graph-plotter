@@ -1,10 +1,9 @@
 package com.github.g0retz.graphplotter.gateway;
 
 import android.content.Context;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import com.github.g0retz.graphplotter.model.Graph;
 import com.github.g0retz.graphplotter.model.GraphData;
 import com.github.g0retz.graphplotter.model.HistogramGraph;
@@ -55,7 +54,7 @@ public class GraphDataGateway {
                 for (int k = 1; k < column.length(); k++) {
                   domain.add(column.getLong(k));
                 }
-              } else if ("line".equals(types.getString(key))){
+              } else if ("line".equals(types.getString(key))) {
                 list = new LinkedList<>();
                 for (int k = 1; k < column.length(); k++) {
                   list.add(column.getInt(k));
@@ -65,7 +64,7 @@ public class GraphDataGateway {
                     Integer.valueOf(colors.getString(key).substring(1), 16),
                     list
                 ));
-              } else if ("histogram".equals(types.getString(key))){
+              } else if ("histogram".equals(types.getString(key))) {
                 list = new LinkedList<>();
                 for (int k = 1; k < column.length(); k++) {
                   list.add(column.getInt(k));
@@ -82,12 +81,12 @@ public class GraphDataGateway {
         }
         mainThread.post(() -> successResult.accept(graphDatas));
       } catch (InterruptedIOException ie) {
-        ie.printStackTrace();
+        Log.w("GraphDataGateway", "getGraphData cancelled", ie);
       } catch (Throwable e) {
         mainThread.post(() -> errorResult.accept(e));
       }
     });
-    thread.run();
+    thread.start();
     return new Disposable() {
       @Override
       public void dispose() {
@@ -108,11 +107,6 @@ public class GraphDataGateway {
     //noinspection ResultOfMethodCallIgnored
     inputStream.read(buffer);
     inputStream.close();
-    if (VERSION.SDK_INT < VERSION_CODES.KITKAT) {
-      //noinspection CharsetObjectCanBeUsed
-      return new String(buffer, "UTF-8");
-    } else {
-      return new String(buffer, StandardCharsets.UTF_8);
-    }
+    return new String(buffer, StandardCharsets.UTF_8);
   }
 }

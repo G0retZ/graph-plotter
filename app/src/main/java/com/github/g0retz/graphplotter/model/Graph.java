@@ -50,7 +50,7 @@ public abstract class Graph {
    * Extract visible path of points represented by array of Float[3], where indexes are: 0 - X value
    * of next point (position), 1 - Y value of next point (from values), 2 - 1 if point is visible, 0
    * if not.
-   *
+   * <p>
    * WARNING! For memory saving the resulting array changes while iterating! So copy the values from
    * array you get ASAP if you need them.
    *
@@ -67,8 +67,8 @@ public abstract class Graph {
         || !checkRangesClipping(start, end, 0, last)) {
       return Collections.emptySet();
     }
-    return () -> new Iterator<Float[]>() {
-      Float[] result = new Float[3];
+    return () -> new Iterator<>() {
+      final Float[] result = new Float[3];
       float currentPosition = start;
 
       @Override
@@ -104,7 +104,8 @@ public abstract class Graph {
    * @param result position, value and flag
    * @return next position
    */
-  abstract float getValue(float start, float position, float end, float min, float max, Float[] result);
+  abstract float getValue(float start, float position, float end, float min, float max,
+      Float[] result);
 
   @Override
   public boolean equals(Object o) {

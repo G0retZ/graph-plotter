@@ -37,7 +37,7 @@ public interface PlotAdapter {
    * Get the type of graph that will be plotted for the specified item.
    *
    * @param position The position of the item within the adapter's data set whose view type we
-   *        want.
+   * want.
    * @return An integer representing the type of graph.
    */
   int getType(int position);
@@ -70,19 +70,18 @@ public interface PlotAdapter {
 
   /**
    * Returns true if the item at the specified position is enabled.
-   *
+   * <p>
    * The result is unspecified if position is invalid. An {@link ArrayIndexOutOfBoundsException}
    * should be thrown in that case for fast failure.
    *
    * @param position Index of the item
-   *
    * @return True if the item is not a separator
    */
   boolean isEnabled(int position);
 
   /**
    * Enable or Disable the item at the specified position.
-   *
+   * <p>
    * The result is unspecified if position is invalid. An {@link ArrayIndexOutOfBoundsException}
    * should be thrown in that case for fast failure.
    *

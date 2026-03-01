@@ -29,10 +29,10 @@ public class HistogramGraph extends Graph {
   float getValue(float start, float position, float end, float min, float max, Float[] result) {
     int pos = (int) position;
     if (pos <= position - 0.5f) {
-        pos++;
+      pos++;
     }
     while (pos < 0 || pos > values.size() - 1) {
-      pos ++;
+      pos++;
     }
     result[0] = (float) pos;
     position = Float.valueOf(values.get(pos));

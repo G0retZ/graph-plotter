@@ -1,7 +1,5 @@
 package com.github.g0retz.graphplotter.model;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.junit.Rule;
@@ -9,6 +7,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import static org.junit.Assert.assertEquals;
 
 public class GraphDataTest {
 

@@ -41,5 +41,4 @@ public class PlotPresenter {
       successResult.accept(plotAdapters);
     }, errorResult);
   }
-
 }
